@@ -248,5 +248,86 @@ footer {
     font-size: 0.9rem;
 }</style>
 
+<script class="js">const perguntas = [
+    {
+        pergunta: "1. Você vê um colega sendo zoado e ofendido todos os dias no recreio. O que você deve fazer?",
+        respostas: [
+            { texto: "Ficar quieto para não sobrar para mim.", correto: false },
+            { texto: "Apoiar a zueira para me enturmar.", correto: false },
+            { texto: "Apoiar a vítima e avisar um professor ou orientador.", correto: true }
+        ]
+    },
+    {
+        pergunta: "2. Alguém criou um perfil falso na internet para espalhar mentiras sobre um aluno da escola. Isso é:",
+        respostas: [
+            { texto: "Cyberbullying e é muito sério.", correto: true },
+            { texto: "Apenas uma brincadeira de internet sem importância.", correto: false },
+            { texto: "Normal, todo mundo passa por isso.", correto: false }
+        ]
+    }
+];
+
+let perguntaAtual = 0;
+
+const elementoPergunta = document.getElementById("pergunta");
+const elementoBotoes = document.getElementById("botoes-resposta");
+const elementoResultado = document.getElementById("resultado-quiz");
+
+function iniciarQuiz() {
+    perguntaAtual = 0;
+    elementoResultado.innerHTML = "";
+    mostrarPergunta();
+}
+
+function mostrarPergunta() {
+    resetarEstado();
+    let atual = perguntas[perguntaAtual];
+    elementoPergunta.innerHTML = atual.pergunta;
+
+    atual.respostas.forEach(resposta => {
+        const botao = document.createElement("button");
+        botao.innerText = resposta.texto;
+        botao.classList.add("btn-resposta");
+        if (resposta.correto) {
+            botao.dataset.correto = resposta.correto;
+        }
+        botao.addEventListener("click", selecionarResposta);
+        elementoBotoes.appendChild(botao);
+    });
+}
+
+function resetarEstado() {
+    elementoResultado.innerHTML = "";
+    while (elementoBotoes.firstChild) {
+        elementoBotoes.removeChild(elementoBotoes.firstChild);
+    }
+}
+
+function selecionarResposta(e) {
+    const botaoSelecionado = e.target;
+    const ehCorreto = botaoSelecionado.dataset.correto === "true";
+
+    if (ehCorreto) {
+        elementoResultado.style.color = "green";
+        elementoResultado.innerHTML = "🎉 Exato! Você mandou muito bem na escolha!";
+    } else {
+        elementoResultado.style.color = "red";
+        elementoResultado.innerHTML = "❌ Opa, essa não é a melhor atitude. A resposta certa incentiva o respeito!";
+    }
+
+    setTimeout(() => {
+        perguntaAtual++;
+        if (perguntaAtual < perguntas.length) {
+            mostrarPergunta();
+        } else {
+            elementoPergunta.innerHTML = "🏆 Fim do Quiz! Parabéns por aprender mais sobre como combater o bullying!";
+            elementoBotoes.innerHTML = "";
+            elementoResultado.innerHTML = "<button class='btn-resposta' onclick='iniciarQuiz()'>Reiniciar Quiz</button>";
+        }
+    }, 2500);
+}
+
+iniciarQuiz();</script>
+
 </body>
 </html>
